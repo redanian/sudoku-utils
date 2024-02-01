@@ -1,2 +1,2 @@
 # sudoku-utils
-Yet another sudoku personal project. Work in progess.
+Yet another sudoku personal project. Work in progress.
