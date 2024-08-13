@@ -1,20 +1,17 @@
-use itertools::{iproduct, Itertools};
-
-use crate::printer::print;
 use crate::solving::eliminate_possibilities_using_existing_singles::EliminatePossibilitiesUsingExistingSingles;
 use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenCombinationsGroups;
 use crate::solving::eliminate_possibilities_using_naked_pairs::EliminatePossibilitiesUsingNakedPairs;
 use crate::solving::eliminate_possibilities_using_pointing::EliminatePossibilitiesUsingPointing;
 use crate::solving::eliminate_possibilities_using_y_wing::EliminatePossibilitiesUsingYWing;
 use crate::solving::set_naked_singles::SetNakedSingles;
-use crate::solving::traits::SudokuTemplateTransformer;
+use crate::solving::traits::SudokuSolvingStrategy;
 use crate::traits::Sudoku;
 use crate::traits::SudokuTemplate;
 
 pub fn solve(sudoku: &Sudoku) -> Sudoku {
     let mut template = SudokuTemplate::from(sudoku.clone());
 
-    let transformers: Vec<Box<dyn SudokuTemplateTransformer>> = vec![
+    let strategies: Vec<Box<dyn SudokuSolvingStrategy>> = vec![
         Box::new(SetNakedSingles {}),
         Box::new(EliminatePossibilitiesUsingExistingSingles {}),
         Box::new(EliminatePossibilitiesUsingPointing {}),
@@ -23,7 +20,7 @@ pub fn solve(sudoku: &Sudoku) -> Sudoku {
         Box::new(EliminatePossibilitiesUsingYWing {}),
     ];
 
-    while transformers.iter().any(|t| t.transform(&mut template)) {}
+    while strategies.iter().any(|s| s.solve(&mut template)) {}
 
     Sudoku::from(template)
 }

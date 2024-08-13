@@ -1,6 +1,6 @@
 use itertools::iproduct;
 
-use crate::solving::traits::SudokuTemplateTransformer;
+use crate::solving::traits::{SudokuSolvingStrategy, Difficulty};
 use crate::traits::SudokuTemplate;
 
 pub(crate) struct SetNakedSingles;
@@ -93,9 +93,12 @@ impl SetNakedSingles {
     }
 }
 
-impl SudokuTemplateTransformer for SetNakedSingles {
-    fn transform(&self, sudoku: &mut SudokuTemplate) -> bool {
-        SetNakedSingles::in_rows_and_columns(sudoku) ||
-            SetNakedSingles::in_squares(sudoku)
+impl SudokuSolvingStrategy for SetNakedSingles {
+    fn solve(&self, sudoku: &mut SudokuTemplate) -> bool {
+        SetNakedSingles::in_rows_and_columns(sudoku) || SetNakedSingles::in_squares(sudoku)
+    }
+
+    fn difficulty(&self) -> Difficulty {
+        Difficulty::Easy
     }
 }

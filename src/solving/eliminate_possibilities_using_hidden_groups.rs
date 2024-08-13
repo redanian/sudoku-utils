@@ -2,7 +2,7 @@ use std::cmp::min;
 
 use itertools::{iproduct, Itertools};
 
-use crate::solving::traits::SudokuTemplateTransformer;
+use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
 use crate::traits::SudokuTemplate;
 
 pub(crate) struct EliminatePossibilitiesUsingHiddenCombinationsGroups;
@@ -82,10 +82,14 @@ impl EliminatePossibilitiesUsingHiddenCombinationsGroups {
     }
 }
 
-impl SudokuTemplateTransformer for EliminatePossibilitiesUsingHiddenCombinationsGroups {
-    fn transform(&self, sudoku: &mut SudokuTemplate) -> bool {
+impl SudokuSolvingStrategy for EliminatePossibilitiesUsingHiddenCombinationsGroups {
+    fn solve(&self, sudoku: &mut SudokuTemplate) -> bool {
         EliminatePossibilitiesUsingHiddenCombinationsGroups::in_rows(sudoku) ||
             EliminatePossibilitiesUsingHiddenCombinationsGroups::in_columns(sudoku) ||
             EliminatePossibilitiesUsingHiddenCombinationsGroups::in_squares(sudoku)
+    }
+
+    fn difficulty(&self) -> Difficulty {
+        Difficulty::Medium
     }
 }

@@ -1,6 +1,6 @@
 use itertools::{iproduct, Itertools};
 
-use crate::solving::traits::SudokuTemplateTransformer;
+use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
 use crate::traits::SudokuTemplate;
 
 pub(crate) struct EliminatePossibilitiesUsingNakedPairs;
@@ -68,8 +68,12 @@ impl EliminatePossibilitiesUsingNakedPairs {
     }
 }
 
-impl SudokuTemplateTransformer for EliminatePossibilitiesUsingNakedPairs {
-    fn transform(&self, sudoku: &mut SudokuTemplate) -> bool {
+impl SudokuSolvingStrategy for EliminatePossibilitiesUsingNakedPairs {
+    fn solve(&self, sudoku: &mut SudokuTemplate) -> bool {
         EliminatePossibilitiesUsingNakedPairs::in_rows_and_columns(sudoku)
+    }
+
+    fn difficulty(&self) -> Difficulty {
+        Difficulty::Easy
     }
 }

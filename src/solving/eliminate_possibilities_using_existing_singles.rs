@@ -1,6 +1,6 @@
 use itertools::iproduct;
 
-use crate::solving::traits::SudokuTemplateTransformer;
+use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
 use crate::traits::SudokuTemplate;
 
 pub(crate) struct EliminatePossibilitiesUsingExistingSingles;
@@ -59,9 +59,13 @@ impl EliminatePossibilitiesUsingExistingSingles {
     }
 }
 
-impl SudokuTemplateTransformer for EliminatePossibilitiesUsingExistingSingles {
-    fn transform(&self, sudoku: &mut SudokuTemplate) -> bool {
+impl SudokuSolvingStrategy for EliminatePossibilitiesUsingExistingSingles {
+    fn solve(&self, sudoku: &mut SudokuTemplate) -> bool {
         EliminatePossibilitiesUsingExistingSingles::in_rows_and_columns(sudoku) ||
             EliminatePossibilitiesUsingExistingSingles::in_squares(sudoku)
+    }
+
+    fn difficulty(&self) -> Difficulty {
+        Difficulty::Easy
     }
 }

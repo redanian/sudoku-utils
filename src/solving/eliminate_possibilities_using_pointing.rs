@@ -1,6 +1,6 @@
 use itertools::{iproduct, Itertools};
 
-use crate::solving::traits::SudokuTemplateTransformer;
+use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
 use crate::traits::SudokuTemplate;
 
 pub(crate) struct EliminatePossibilitiesUsingPointing;
@@ -128,9 +128,13 @@ impl EliminatePossibilitiesUsingPointing {
     }
 }
 
-impl SudokuTemplateTransformer for EliminatePossibilitiesUsingPointing {
-    fn transform(&self, sudoku: &mut SudokuTemplate) -> bool {
+impl SudokuSolvingStrategy for EliminatePossibilitiesUsingPointing {
+    fn solve(&self, sudoku: &mut SudokuTemplate) -> bool {
         EliminatePossibilitiesUsingPointing::in_rows_and_columns(sudoku) ||
             EliminatePossibilitiesUsingPointing::in_squares(sudoku)
+    }
+
+    fn difficulty(&self) -> Difficulty {
+        Difficulty::Medium
     }
 }

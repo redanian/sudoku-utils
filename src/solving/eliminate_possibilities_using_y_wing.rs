@@ -1,4 +1,4 @@
-use crate::solving::traits::SudokuTemplateTransformer;
+use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
 use crate::traits::SudokuTemplate;
 use itertools::iproduct;
 
@@ -94,8 +94,12 @@ impl EliminatePossibilitiesUsingYWing {
     }
 }
 
-impl SudokuTemplateTransformer for EliminatePossibilitiesUsingYWing {
-    fn transform(&self, sudoku: &mut SudokuTemplate) -> bool {
+impl SudokuSolvingStrategy for EliminatePossibilitiesUsingYWing {
+    fn solve(&self, sudoku: &mut SudokuTemplate) -> bool {
         EliminatePossibilitiesUsingYWing::everywhere(sudoku)
+    }
+
+    fn difficulty(&self) -> Difficulty {
+        Difficulty::Hard
     }
 }
