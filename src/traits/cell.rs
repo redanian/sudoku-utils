@@ -1,8 +1,7 @@
-use itertools::Itertools;
-
 use crate::utils::BoolIteratorUtils;
 
 /// Represents a modifiable sudoku cell.
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub(crate) struct Cell {
     value: usize,
     possibilities: [bool; 9],

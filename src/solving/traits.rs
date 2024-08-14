@@ -24,6 +24,7 @@ pub(crate) trait SudokuSolvingStrategy {
 }
 
 /// Difficulty levels of sudoku solving strategies.
+#[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub(crate) enum Difficulty {
     Easy,
     Medium,

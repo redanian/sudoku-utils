@@ -3,6 +3,7 @@ use itertools::{iproduct, Itertools};
 use crate::traits::cell::Cell;
 use crate::traits::sudoku::Sudoku;
 
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub(crate) struct SudokuTemplate {
     pub(crate) cells: [[Cell; 9]; 9],
 }
