@@ -168,11 +168,14 @@ mod tests {
         // When I apply the strategy for rows.
         let changed = SetNakedSingles::in_rows_and_columns(&mut sudoku);
 
-        // Then the missing value in the first row should be filled, and all other rows should remain unchanged.
+        // Then the missing value in the first row should be filled, and all other cells should remain unchanged.
         assert_eq!(changed, true);
         assert_eq!(sudoku.cells[0][0].get_value(), 1);
 
-        for (x, y) in iproduct!(1..9, 0..9) {
+        for (x, y) in iproduct!(0..9, 0..9) {
+            if (x, y) == (0, 0) {
+                continue
+            }
             assert_eq!(sudoku.cells[x][y], original.cells[x][y], "Cell at ({x}, {y}) was changed.");
         }
     }
@@ -186,11 +189,14 @@ mod tests {
         // When I apply the strategy for columns.
         let changed = SetNakedSingles::in_rows_and_columns(&mut sudoku);
 
-        // Then the missing value in the first column should be filled, and all other columns should remain unchanged.
+        // Then the missing value in the first column should be filled, and all other cells should remain unchanged.
         assert_eq!(changed, true);
         assert_eq!(sudoku.cells[0][0].get_value(), 1);
 
-        for (x, y) in iproduct!(0..9, 1..9) {
+        for (x, y) in iproduct!(0..9, 0..9) {
+            if (x, y) == (0, 0) {
+                continue
+            }
             assert_eq!(sudoku.cells[x][y], original.cells[x][y], "Cell at ({x}, {y}) was changed.");
         }
     }
@@ -218,20 +224,15 @@ mod tests {
         // When I apply the strategy for squares.
         let changed = SetNakedSingles::in_squares(&mut sudoku);
 
-        // Then the missing value in the first square should be filled, and all other squares should remain unchanged.
+        // Then the missing value in the first square should be filled, and all other cells should remain unchanged.
         assert_eq!(changed, true);
         assert_eq!(sudoku.cells[0][0].get_value(), 1);
 
-        for (sx, sy) in iproduct!([3, 6], [0, 3, 6]) {
-            for (x, y) in iproduct!(1..3, 0..3) {
-                assert_eq!(
-                    sudoku.cells[sx + x][sy + y],
-                    original.cells[sx + x][sy + y],
-                    "Cell at ({}, {}) was not left untouched.",
-                    sx + x,
-                    sy + y
-                );
+        for (x, y) in iproduct!(0..9, 0..9) {
+            if (x, y) == (0, 0) {
+                continue
             }
+            assert_eq!(sudoku.cells[x][y], original.cells[x][y], "Cell at ({x}, {y}) was changed.");
         }
     }
 
