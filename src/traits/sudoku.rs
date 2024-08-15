@@ -58,3 +58,19 @@ impl FromStr for Sudoku {
         Ok(Sudoku::new(cells))
     }
 }
+
+impl Sudoku {
+    pub fn to_string(&self) -> String {
+        self.cells
+            .iter()
+            .flatten()
+            .map(|&n| {
+                if n == 0 {
+                    '.'
+                } else {
+                    char::from_digit(n as u32, 10).unwrap_or('.')
+                }
+            })
+            .collect()
+    }
+}
