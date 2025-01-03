@@ -4,7 +4,7 @@ use crate::solving::eliminate_possibilities_using_naked_pairs::EliminatePossibil
 use crate::solving::eliminate_possibilities_using_pointing::EliminatePossibilitiesUsingPointing;
 use crate::solving::eliminate_possibilities_using_x_wing::EliminatePossibilitiesUsingXWing;
 use crate::solving::eliminate_possibilities_using_y_wing::EliminatePossibilitiesUsingYWing;
-use crate::solving::set_naked_singles::SetNakedSingles;
+use crate::solving::set_hidden_singles::SetHiddenSingles;
 use crate::solving::traits::SudokuSolvingStrategy;
 use crate::traits::Sudoku;
 use crate::traits::SudokuTemplate;
@@ -13,7 +13,7 @@ pub fn solve(sudoku: &Sudoku) -> Sudoku {
     let mut template = SudokuTemplate::from(sudoku.clone());
 
     let strategies: Vec<Box<dyn SudokuSolvingStrategy>> = vec![
-        Box::new(SetNakedSingles {}),
+        Box::new(SetHiddenSingles {}),
         Box::new(EliminatePossibilitiesUsingExistingSingles {}),
         Box::new(EliminatePossibilitiesUsingPointing {}),
         Box::new(EliminatePossibilitiesUsingNakedPairs {}),

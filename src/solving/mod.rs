@@ -6,5 +6,5 @@ mod eliminate_possibilities_using_naked_pairs;
 mod eliminate_possibilities_using_pointing;
 mod eliminate_possibilities_using_x_wing;
 mod eliminate_possibilities_using_y_wing;
-mod set_naked_singles;
+mod set_hidden_singles;
 mod traits;
