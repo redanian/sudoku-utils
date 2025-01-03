@@ -6,7 +6,8 @@ use crate::traits::SudokuTemplate;
 pub(crate) struct EliminatePossibilitiesUsingExistingSingles;
 
 impl EliminatePossibilitiesUsingExistingSingles {
-    /// For each cell that has a value, eliminates the value as a possibility from other cells in the same row or column.
+    /// For each cell that has a value, eliminates the value as a possibility from other cells in the same row or
+    /// column.
     fn in_rows_and_columns(sudoku: &mut SudokuTemplate) -> bool {
         let mut made_changes = false;
 
@@ -33,7 +34,7 @@ impl EliminatePossibilitiesUsingExistingSingles {
         made_changes
     }
 
-    /// For each cell that has a value, eliminates the value as a possibility from other1 cells in the same square.
+    /// For each cell that has a value, eliminates the value as a possibility from other cells in the same square.
     fn in_squares(sudoku: &mut SudokuTemplate) -> bool {
         let mut made_changes = false;
 
@@ -67,5 +68,148 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingExistingSingles {
 
     fn difficulty(&self) -> Difficulty {
         Difficulty::Easy
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::solving::eliminate_possibilities_using_existing_singles::EliminatePossibilitiesUsingExistingSingles;
+    use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
+    use crate::traits::SudokuTemplate;
+    use crate::Sudoku;
+    use itertools::iproduct;
+
+    const EMPTY_SUDOKU: &str = "\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+    ";
+
+    const SUDOKU: &str = "\
+        1........\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+        .........\
+    ";
+
+    #[test]
+    fn in_rows_and_columns_correctly_removes_possibilities_for_existing_value() {
+        // Given a sudoku with only one cell with a value in the first row and column.
+        let mut sudoku = SudokuTemplate::from(SUDOKU.parse::<Sudoku>().unwrap());
+        let original = sudoku.clone();
+
+        // When I apply the strategy for rows and columns.
+        let changed = EliminatePossibilitiesUsingExistingSingles::in_rows_and_columns(&mut sudoku);
+
+        // Then the cell should not be changed, the value should be removed as a possibility from other cells in the
+        // same row and column and all other cells should remain unchanged.
+        assert_eq!(changed, true, "Sudoku template should have changed but was not.");
+        assert_eq!(sudoku.cells[0][0].get_value(), 1, "The value at cell (0, 0) should be 1 but is not.");
+
+        for (x, y) in iproduct!(0..9, 0..9) {
+            if (x, y) == (0, 0) {
+                continue
+            } else if x == 0 || y == 0 {
+                // For related cells:
+                assert_eq!(
+                    sudoku.cells[x][y].contains_possibility(1),
+                    false,
+                    "Cell at ({x}, {y}) still contains the value 1 as a possibility."
+                );
+            } else {
+                // For unrelated cells:
+                assert_eq!(sudoku.cells[x][y], original.cells[x][y], "Cell at ({x}, {y}) was changed.");
+            }
+        }
+    }
+
+    #[test]
+    fn in_rows_and_columns_does_not_change_empty_sudoku() {
+        // Given an empty sudoku.
+        let mut sudoku = SudokuTemplate::from(EMPTY_SUDOKU.parse::<Sudoku>().unwrap());
+        let original = sudoku.clone();
+
+        // When I apply the strategy for rows and columns.
+        let changed = EliminatePossibilitiesUsingExistingSingles::in_rows_and_columns(&mut sudoku);
+
+        // Then the sudoku should not have changed.
+        assert_eq!(changed, false, "Sudoku template should not have changed.");
+        assert_eq!(sudoku, original, "Sudoku template should not have changed.");
+    }
+
+    #[test]
+    fn in_squares_correctly_removes_possibilities_for_existing_value() {
+        // Given a sudoku with only one cell with a value in the first square.
+        let mut sudoku = SudokuTemplate::from(SUDOKU.parse::<Sudoku>().unwrap());
+        let original = sudoku.clone();
+
+        // When I apply the strategy for squares.
+        let changed = EliminatePossibilitiesUsingExistingSingles::in_squares(&mut sudoku);
+
+        // Then the cell should not be changed, the value should be removed as a possibility from other cells in the
+        // same square and all other cells should remain unchanged.
+        assert_eq!(changed, true, "Sudoku template should have changed but was not.");
+        assert_eq!(sudoku.cells[0][0].get_value(), 1, "The value at cell (0, 0) should be 1 but is not.");
+
+        for (x, y) in iproduct!(0..9, 0..9) {
+            if (x, y) == (0, 0) {
+                continue
+            } else if x < 3 && y < 3 {
+                // For related cells:
+                assert_eq!(
+                    sudoku.cells[x][y].contains_possibility(1),
+                    false,
+                    "Cell at ({x}, {y}) still contains the value 1 as a possibility."
+                );
+            } else {
+                // For unrelated cells:
+                assert_eq!(sudoku.cells[x][y], original.cells[x][y], "Cell at ({x}, {y}) was changed.");
+            }
+        }
+    }
+
+    #[test]
+    fn in_squares_does_not_change_empty_sudoku() {
+        // Given an empty sudoku.
+        let mut sudoku = SudokuTemplate::from(EMPTY_SUDOKU.parse::<Sudoku>().unwrap());
+        let original = sudoku.clone();
+
+        // When I apply the strategy for rows and columns.
+        let changed = EliminatePossibilitiesUsingExistingSingles::in_squares(&mut sudoku);
+
+        // Then the sudoku should not have changed.
+        assert_eq!(changed, false, "Sudoku template should not have changed.");
+        assert_eq!(sudoku, original, "Sudoku template should not have changed.");
+    }
+
+    #[test]
+    fn solve_correctly_returns_changed_flag() {
+        // Given a sudoku with some filled cells.
+        let mut sudoku = SudokuTemplate::from(SUDOKU.parse::<Sudoku>().unwrap());
+
+        // When I apply the strategy using solve(), then it should return true.
+        assert_eq!(EliminatePossibilitiesUsingExistingSingles {}.solve(&mut sudoku), true);
+
+        // Given an empty sudoku.
+        let mut empty_sudoku = SudokuTemplate::from(EMPTY_SUDOKU.parse::<Sudoku>().unwrap());
+
+        // When I apply the strategy using solve(), then it should return false.
+        assert_eq!(EliminatePossibilitiesUsingExistingSingles {}.solve(&mut empty_sudoku), false);
+    }
+
+    #[test]
+    fn difficulty_is_easy() {
+        assert_eq!(EliminatePossibilitiesUsingExistingSingles {}.difficulty(), Difficulty::Easy);
     }
 }
