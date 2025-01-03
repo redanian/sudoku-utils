@@ -3,6 +3,31 @@ use itertools::iproduct;
 use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
 use crate::traits::SudokuTemplate;
 
+/// Sudoku strategy that eliminates possibilities in a sudoku puzzle by analyzing existing single values. It uses cells
+/// that already have a value to remove that value as a possibility from other cells in the same row, column, or block.
+///
+/// Consider the following example:
+/// ```text
+///    1 2 3 4 5 6 7 8 9
+///    -----------------
+/// A |5    |     |     |
+/// B |     |     |     |
+/// C |     |     |     |
+///    -----------------
+/// D |     |     |     |
+/// E |     |     |     |
+/// F |     |     |     |
+///    -----------------
+/// G |     |     |     |
+/// H |     |     |     |
+/// I |     |     |     |
+///    -----------------
+/// ```
+/// The cell at `A1` has the value 5, so other cells in the row `A`, column `1` or block `A-C, 1-3` cannot have the
+/// value 5 and this value can safely be eliminated as a possibility from these cells.
+///
+/// This strategy implementation iterates through all cells in the sudoku. When a cell with a confirmed value is found,
+/// it updates the candidates of all related cells (same row, column, or block) by removing the confirmed value.
 pub(crate) struct EliminatePossibilitiesUsingExistingSingles;
 
 impl EliminatePossibilitiesUsingExistingSingles {
