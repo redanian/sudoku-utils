@@ -1,5 +1,5 @@
 use crate::solving::eliminate_possibilities_using_existing_singles::EliminatePossibilitiesUsingExistingSingles;
-use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenCombinationsGroups;
+use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
 use crate::solving::eliminate_possibilities_using_naked_pairs::EliminatePossibilitiesUsingNakedPairs;
 use crate::solving::eliminate_possibilities_using_pointing::EliminatePossibilitiesUsingPointing;
 use crate::solving::eliminate_possibilities_using_x_wing::EliminatePossibilitiesUsingXWing;
@@ -17,7 +17,7 @@ pub fn solve(sudoku: &Sudoku) -> Sudoku {
         Box::new(EliminatePossibilitiesUsingExistingSingles {}),
         Box::new(EliminatePossibilitiesUsingPointing {}),
         Box::new(EliminatePossibilitiesUsingNakedPairs {}),
-        Box::new(EliminatePossibilitiesUsingHiddenCombinationsGroups {}),
+        Box::new(EliminatePossibilitiesUsingHiddenGroups {}),
         Box::new(EliminatePossibilitiesUsingXWing {}),
         Box::new(EliminatePossibilitiesUsingYWing {}),
     ];

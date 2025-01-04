@@ -39,9 +39,9 @@ use crate::traits::SudokuTemplate;
 /// This strategy iterates through all rows, columns, and blocks in a sudoku. It checks combinations of missing values
 /// to identify hidden pairs, triples, or quads. When a hidden group is found, it eliminates other candidates from the
 /// relevant cells.
-pub(crate) struct EliminatePossibilitiesUsingHiddenCombinationsGroups;
+pub(crate) struct EliminatePossibilitiesUsingHiddenGroups;
 
-impl EliminatePossibilitiesUsingHiddenCombinationsGroups {
+impl EliminatePossibilitiesUsingHiddenGroups {
     /// Eliminates possibilities from empty cells by identifying hidden groups and their containing cells in rows.
     fn in_rows(sudoku: &mut SudokuTemplate) -> bool {
         let mut made_changes = false;
@@ -151,11 +151,11 @@ impl EliminatePossibilitiesUsingHiddenCombinationsGroups {
     }
 }
 
-impl SudokuSolvingStrategy for EliminatePossibilitiesUsingHiddenCombinationsGroups {
+impl SudokuSolvingStrategy for EliminatePossibilitiesUsingHiddenGroups {
     fn solve(&self, sudoku: &mut SudokuTemplate) -> bool {
-        EliminatePossibilitiesUsingHiddenCombinationsGroups::in_rows(sudoku) ||
-            EliminatePossibilitiesUsingHiddenCombinationsGroups::in_columns(sudoku) ||
-            EliminatePossibilitiesUsingHiddenCombinationsGroups::in_squares(sudoku)
+        EliminatePossibilitiesUsingHiddenGroups::in_rows(sudoku) ||
+            EliminatePossibilitiesUsingHiddenGroups::in_columns(sudoku) ||
+            EliminatePossibilitiesUsingHiddenGroups::in_squares(sudoku)
     }
 
     fn difficulty(&self) -> Difficulty {
@@ -196,7 +196,7 @@ mod tests {
 
     mod in_rows {
         use crate::solving::eliminate_possibilities_using_hidden_groups::tests::{as_template, SUDOKU_WITHOUT_HIDDEN_GROUP};
-        use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenCombinationsGroups;
+        use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
         use itertools::iproduct;
 
         const SUDOKU_WITH_HIDDEN_PAIR_IN_ROW: &str = "\
@@ -242,7 +242,7 @@ mod tests {
             let original = sudoku.clone();
 
             // When the strategy is applied for rows.
-            let changed = EliminatePossibilitiesUsingHiddenCombinationsGroups::in_rows(&mut sudoku);
+            let changed = EliminatePossibilitiesUsingHiddenGroups::in_rows(&mut sudoku);
 
             // Then the last two cells of the first row should only contain 8 and 9 as possible values and other cells
             // in the sudoku should remain unchanged.
@@ -271,7 +271,7 @@ mod tests {
             let original = sudoku.clone();
 
             // When the strategy is applied for rows.
-            let changed = EliminatePossibilitiesUsingHiddenCombinationsGroups::in_rows(&mut sudoku);
+            let changed = EliminatePossibilitiesUsingHiddenGroups::in_rows(&mut sudoku);
 
             // Then the last three cells of the first row should only contain 7, 8 and 9 as possible values and other
             // cells in the sudoku should remain unchanged.
@@ -300,7 +300,7 @@ mod tests {
             let original = sudoku.clone();
 
             // When the strategy is applied for rows.
-            let changed = EliminatePossibilitiesUsingHiddenCombinationsGroups::in_rows(&mut sudoku);
+            let changed = EliminatePossibilitiesUsingHiddenGroups::in_rows(&mut sudoku);
 
             // Then the last four cells of the first row should only contain 6, 7, 8 and 9 as possible values and other
             // cells in the sudoku should remain unchanged.
@@ -329,7 +329,7 @@ mod tests {
             let original = sudoku.clone();
 
             // When the strategy is applied for rows.
-            let changed = EliminatePossibilitiesUsingHiddenCombinationsGroups::in_rows(&mut sudoku);
+            let changed = EliminatePossibilitiesUsingHiddenGroups::in_rows(&mut sudoku);
 
             // Then the sudoku should not have changed.
             assert_eq!(changed, false, "Sudoku template should not have changed.");
