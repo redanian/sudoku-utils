@@ -36,9 +36,9 @@ use crate::traits::SudokuTemplate;
 /// Although cells `B8` and `B9` have many possibilities, the numbers [2, 5] in row `B` can only exist in these cells.
 /// The numbers [2, 5] are a hidden pair in these cells, so the other possibilities in these cells can be removed.
 ///
-/// This strategy iterates through all rows, columns, and blocks in a sudoku. It checks combinations of missing values
-/// to identify hidden pairs, triples, or quads. When a hidden group is found, it eliminates other candidates from the
-/// relevant cells.
+/// This strategy implementation iterates through all rows, columns, and blocks in a sudoku. It checks combinations of
+/// missing values to identify hidden pairs, triples, or quads. When a hidden group is found, it eliminates other
+/// candidates from the relevant cells.
 pub(crate) struct EliminatePossibilitiesUsingHiddenGroups;
 
 impl EliminatePossibilitiesUsingHiddenGroups {
@@ -331,7 +331,150 @@ mod tests {
             // When the strategy is applied for rows.
             let changed = EliminatePossibilitiesUsingHiddenGroups::in_rows(&mut sudoku);
 
-            // Then the sudoku should not have changed.
+            // Then the sudoku should not change.
+            assert_eq!(changed, false, "Sudoku template should not have changed.");
+            assert_eq!(sudoku, original, "Sudoku template should not have changed.");
+        }
+    }
+
+    mod in_columns {
+        use crate::solving::eliminate_possibilities_using_hidden_groups::tests::{as_template, SUDOKU_WITHOUT_HIDDEN_GROUP};
+        use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
+        use itertools::iproduct;
+
+        const SUDOKU_WITH_HIDDEN_PAIR_IN_COLUMN: &str = "\
+        .89......\
+        .........\
+        3........\
+        4........\
+        5........\
+        6........\
+        7........\
+        .........\
+        .........\
+        ";
+
+        const SUDOKU_WITH_HIDDEN_TRIPLE_IN_COLUMN: &str = "\
+        ..7......\
+        .8.......\
+        ..9......\
+        4........\
+        5........\
+        6........\
+        .........\
+        .........\
+        .........\
+        ";
+
+        const SUDOKU_WITH_HIDDEN_QUAD_IN_COLUMN: &str = "\
+        .7.......\
+        .86......\
+        ..9......\
+        4........\
+        5........\
+        .........\
+        .........\
+        .........\
+        .........\
+        ";
+
+        #[test]
+        fn in_columns_correctly_processes_hidden_pair() {
+            // Given a sudoku with the hidden pair (8, 9) in the last two cells of the first column.
+            let mut sudoku = as_template(SUDOKU_WITH_HIDDEN_PAIR_IN_COLUMN);
+            let original = sudoku.clone();
+
+            // When the strategy is applied for columns.
+            let changed = EliminatePossibilitiesUsingHiddenGroups::in_columns(&mut sudoku);
+
+            // Then the last two cells of the first column should only contain 8 and 9 as possible values and other
+            // cells in the sudoku should remain unchanged.
+            assert_eq!(changed, true, "Sudoku template should have changed but was not.");
+            assert_ne!(original, sudoku, "Sudoku template should have changed but was not.");
+
+            for (x, y) in iproduct!(0..9, 0..9) {
+                if (x, y) == (7, 0) || (x, y) == (8, 0) {
+                    // For the cells containing the hidden group:
+                    assert_eq!(
+                        sudoku.cells[x][y].possible_values(),
+                        vec![8, 9],
+                        "Cell at ({x}, {y}) does not contain only [8, 9] as possible values."
+                    );
+                } else {
+                    // For all other cells:
+                    assert_eq!(sudoku.cells[x][y], original.cells[x][y], "Cell at ({x}, {y}) was changed.")
+                }
+            }
+        }
+
+        #[test]
+        fn in_columns_correctly_processes_hidden_triple() {
+            // Given a sudoku with the hidden triple (7, 8, 9) in the last three cells of the first column.
+            let mut sudoku = as_template(SUDOKU_WITH_HIDDEN_TRIPLE_IN_COLUMN);
+            let original = sudoku.clone();
+
+            // When the strategy is applied for columns.
+            let changed = EliminatePossibilitiesUsingHiddenGroups::in_columns(&mut sudoku);
+
+            // Then the last three cells of the first column should only contain 7, 8 and 9 as possible values and other
+            // cells in the sudoku should remain unchanged.
+            assert_eq!(changed, true, "Sudoku template should have changed but was not.");
+            assert_ne!(original, sudoku, "Sudoku template should have changed but was not.");
+
+            for (x, y) in iproduct!(0..9, 0..9) {
+                if (x, y) == (6, 0) || (x, y) == (7, 0) || (x, y) == (8, 0) {
+                    // For the cells containing the hidden group:
+                    assert_eq!(
+                        sudoku.cells[x][y].possible_values(),
+                        vec![7, 8, 9],
+                        "Cell at ({x}, {y}) does not contain only [7, 8, 9] as possible values."
+                    );
+                } else {
+                    // For all other cells:
+                    assert_eq!(sudoku.cells[x][y], original.cells[x][y], "Cell at ({x}, {y}) was changed.")
+                }
+            }
+        }
+
+        #[test]
+        fn in_columns_correctly_processes_hidden_quad() {
+            // Given a sudoku with the hidden quad (6, 7, 8, 9) in the last four cells of the first column.
+            let mut sudoku = as_template(SUDOKU_WITH_HIDDEN_QUAD_IN_COLUMN);
+            let original = sudoku.clone();
+
+            // When the strategy is applied for columns.
+            let changed = EliminatePossibilitiesUsingHiddenGroups::in_columns(&mut sudoku);
+
+            // Then the last four cells of the first column should only contain 6, 7, 8 and 9 as possible values and
+            // other cells in the sudoku should remain unchanged.
+            assert_eq!(changed, true, "Sudoku template should have changed but was not.");
+            assert_ne!(original, sudoku, "Sudoku template should have changed but was not.");
+
+            for (x, y) in iproduct!(0..9, 0..9) {
+                if (x, y) == (5, 0) || (x, y) == (6, 0) || (x, y) == (7, 0) || (x, y) == (8, 0) {
+                    // For the cells containing the hidden group:
+                    assert_eq!(
+                        sudoku.cells[x][y].possible_values(),
+                        vec![6, 7, 8, 9],
+                        "Cell at ({x}, {y}) does not contain only [6, 7, 8, 9] as possible values."
+                    );
+                } else {
+                    // For all other cells:
+                    assert_eq!(sudoku.cells[x][y], original.cells[x][y], "Cell at ({x}, {y}) was changed.")
+                }
+            }
+        }
+
+        #[test]
+        fn in_columns_does_not_change_sudoku_without_hidden_groups() {
+            // Given a sudoku without hidden groups.
+            let mut sudoku = as_template(SUDOKU_WITHOUT_HIDDEN_GROUP);
+            let original = sudoku.clone();
+
+            // When the strategy is applied for columns.
+            let changed = EliminatePossibilitiesUsingHiddenGroups::in_columns(&mut sudoku);
+
+            // Then the sudoku should not change.
             assert_eq!(changed, false, "Sudoku template should not have changed.");
             assert_eq!(sudoku, original, "Sudoku template should not have changed.");
         }
