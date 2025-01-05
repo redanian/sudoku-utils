@@ -166,7 +166,8 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingHiddenGroups {
 #[cfg(test)]
 mod tests {
     use crate::solving::eliminate_possibilities_using_existing_singles::EliminatePossibilitiesUsingExistingSingles;
-    use crate::solving::traits::SudokuSolvingStrategy;
+    use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
+    use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
     use crate::traits::SudokuTemplate;
     use crate::Sudoku;
 
@@ -621,5 +622,10 @@ mod tests {
             assert_eq!(changed, false, "Sudoku template should not have changed.");
             assert_eq!(sudoku, original, "Sudoku template should not have changed.");
         }
+    }
+
+    #[test]
+    fn difficulty_is_medium() {
+        assert_eq!(EliminatePossibilitiesUsingHiddenGroups {}.difficulty(), Difficulty::Medium);
     }
 }
