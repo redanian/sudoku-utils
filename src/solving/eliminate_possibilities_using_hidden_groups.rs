@@ -1,9 +1,7 @@
-use std::cmp::min;
-
-use itertools::{iproduct, Itertools};
-
 use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
 use crate::traits::SudokuTemplate;
+use itertools::{iproduct, Itertools};
+use std::cmp::min;
 
 /// Sudoku strategy that eliminates possibilities from empty cells by identifying hidden groups (hidden pairs, hidden
 /// triples, hidden quads).
@@ -44,8 +42,6 @@ pub(crate) struct EliminatePossibilitiesUsingHiddenGroups;
 impl EliminatePossibilitiesUsingHiddenGroups {
     /// Eliminates possibilities from empty cells by identifying hidden groups and their containing cells in rows.
     fn in_rows(sudoku: &mut SudokuTemplate) -> bool {
-        let mut made_changes = false;
-
         // For each row
         for row in 0..9 {
             // Get all the missing values in the row.
@@ -68,21 +64,27 @@ impl EliminatePossibilitiesUsingHiddenGroups {
                     // If the number of containing cells matches the length of the combination, then it's a hidden
                     // group. Remove all other possibilities from these cells.
                     if combination_len == containing_cells.len() && combination_len != missing_values.len() {
+                        let mut made_changes = false;
                         for (x, y) in containing_cells {
                             made_changes |= sudoku.cells[x][y].remove_possibilities_outside_of(combination);
+                        }
+
+                        // Removing possibilities from cells may expose hidden singles. Because this strategy assumes
+                        // that the sudoku template is in a clean state and that empty cells are really empty, the
+                        // execution must stop.
+                        if made_changes {
+                            return true;
                         }
                     }
                 }
             }
         }
 
-        made_changes
+        false
     }
 
     /// Eliminates possibilities from empty cells by identifying hidden groups and their containing cells in columns.
     fn in_columns(sudoku: &mut SudokuTemplate) -> bool {
-        let mut made_changes = false;
-
         // For each column
         for column in 0..9 {
             // Get all the missing values in the column.
@@ -104,21 +106,27 @@ impl EliminatePossibilitiesUsingHiddenGroups {
                     // If the number of containing cells matches the length of the combination, then it's a hidden
                     // group. Remove all other possibilities from these cells.
                     if combination_len == containing_cells.len() && combination_len != missing_values.len() {
+                        let mut made_changes = false;
                         for (x, y) in containing_cells {
                             made_changes |= sudoku.cells[x][y].remove_possibilities_outside_of(combination);
+                        }
+
+                        // Removing possibilities from cells may expose hidden singles. Because this strategy assumes
+                        // that the sudoku template is in a clean state and that empty cells are really empty, the
+                        // execution must stop.
+                        if made_changes {
+                            return true;
                         }
                     }
                 }
             }
         }
 
-        made_changes
+        false
     }
 
     /// Eliminates possibilities from empty cells by identifying hidden groups and their containing cells in squares.
     fn in_squares(sudoku: &mut SudokuTemplate) -> bool {
-        let mut made_changes = false;
-
         // For each square
         for (sq_row, sq_column) in iproduct!(0..3, 0..3) {
             // Get all the missing values in the square.
@@ -139,15 +147,23 @@ impl EliminatePossibilitiesUsingHiddenGroups {
                     // If the number of containing cells matches the length of the combination, then it's a hidden
                     // group. Remove all other possibilities from these cells.
                     if combination_len == containing_cells.len() && combination_len != missing_values.len() {
+                        let mut made_changes = false;
                         for (x, y) in containing_cells {
                             made_changes |= sudoku.cells[x][y].remove_possibilities_outside_of(combination);
+                        }
+
+                        // Removing possibilities from cells may expose hidden singles. Because this strategy assumes
+                        // that the sudoku template is in a clean state and that empty cells are really empty, the
+                        // execution must stop.
+                        if made_changes {
+                            return true;
                         }
                     }
                 }
             }
         }
 
-        made_changes
+        false
     }
 }
 
