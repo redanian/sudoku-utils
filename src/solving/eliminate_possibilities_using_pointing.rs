@@ -21,7 +21,7 @@ impl EliminatePossibilitiesUsingPointing {
                     let sq_row = row / 3;
                     let sq_col = squares[0];
 
-                    for (x, y) in iproduct!((0..3), (0..3)) {
+                    for (x, y) in iproduct!(0..3, 0..3) {
                         let cell_row = 3 * sq_row + x;
                         let cell_col = 3 * sq_col + y;
 
@@ -45,7 +45,7 @@ impl EliminatePossibilitiesUsingPointing {
                     let sq_row = squares[0];
                     let sq_col = col / 3;
 
-                    for (x, y) in iproduct!((0..3), (0..3)) {
+                    for (x, y) in iproduct!(0..3, 0..3) {
                         let cell_row = 3 * sq_row + x;
                         let cell_col = 3 * sq_col + y;
 
@@ -66,7 +66,7 @@ impl EliminatePossibilitiesUsingPointing {
         let mut made_changes = false;
 
         // For each square
-        for (sq_row, sq_col) in iproduct!((0..3), (0..3)) {
+        for (sq_row, sq_col) in iproduct!(0..3, 0..3) {
             let missing_values = sudoku.get_values_in_square(sq_row, sq_col);
 
             // For each missing value
@@ -78,7 +78,7 @@ impl EliminatePossibilitiesUsingPointing {
                 let mut value_col = None;
 
                 // For each cell in the square
-                for (x, y) in iproduct!((0..3), (0..3)) {
+                for (x, y) in iproduct!(0..3, 0..3) {
                     // Calculate row and column of the cell
                     let row = 3 * sq_row + x;
                     let col = 3 * sq_col + y;

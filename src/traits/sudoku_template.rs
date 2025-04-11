@@ -26,7 +26,7 @@ impl SudokuTemplate {
     }
 
     pub(crate) fn get_values_in_square(&self, row: usize, column: usize) -> Vec<usize> {
-        iproduct!((0..3), (0..3))
+        iproduct!(0..3, 0..3)
             .map(|(x, y)| &self.cells[3 * row + x][3 * column + y])
             .filter(|&cell| cell.is_set())
             .map(|cell| cell.get_value())

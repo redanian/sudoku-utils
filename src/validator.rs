@@ -6,6 +6,6 @@ pub(crate) fn is_valid(sudoku: &Sudoku) -> bool {
     sudoku.get_cells()
         .into_iter()
         .flatten()
-        .any(|x| *x < 0 || *x > 9)
+        .any(|x| *x > 9)
         .not()
 }
