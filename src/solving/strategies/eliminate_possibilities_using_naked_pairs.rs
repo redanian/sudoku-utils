@@ -1,7 +1,7 @@
-use itertools::{iproduct, Itertools};
-
-use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
+use crate::solving::traits::SudokuSolvingStrategy;
+use crate::traits::Difficulty;
 use crate::traits::SudokuTemplate;
+use itertools::{iproduct, Itertools};
 
 pub(crate) struct EliminatePossibilitiesUsingNakedPairs;
 

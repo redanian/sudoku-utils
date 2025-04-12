@@ -1,3 +1,4 @@
+use crate::traits::Difficulty;
 use crate::traits::SudokuTemplate;
 
 /// Defines a solving strategy for a `SudokuTemplate`. Implementors of this trait provide specific algorithms or
@@ -21,12 +22,4 @@ pub(crate) trait SudokuSolvingStrategy {
     ///
     /// `Difficulty` - the difficulty level of the strategy.
     fn difficulty(&self) -> Difficulty;
-}
-
-/// Difficulty levels of sudoku solving strategies.
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
-pub(crate) enum Difficulty {
-    Easy,
-    Medium,
-    Hard,
 }

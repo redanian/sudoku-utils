@@ -1,7 +1,7 @@
-use itertools::iproduct;
-
-use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
+use crate::solving::traits::SudokuSolvingStrategy;
+use crate::traits::Difficulty;
 use crate::traits::SudokuTemplate;
+use itertools::iproduct;
 
 /// Sudoku strategy that sets hidden singles in a sudoku puzzle by analyzing possible values of empty cells. It compares
 /// the possibilities of related empty cells, and if a value exists as a possibility only in one empty cell, it sets
@@ -38,8 +38,6 @@ impl SetHiddenSingles {
     /// For each possible value of each empty cell, it sets the value to the cell if the value is only possible in the
     /// cell and not in other empty cells in the same row or column.
     fn in_rows_and_columns(sudoku: &mut SudokuTemplate) -> bool {
-        let mut made_changes = false;
-
         // For each cell
         for (x, y) in iproduct!(0..9, 0..9) {
             // If the cell is empty
@@ -75,21 +73,18 @@ impl SetHiddenSingles {
                     if set_value_row || set_value_col {
                         // Set it
                         sudoku.cells[x][y].set_value(value);
-                        made_changes = true;
-                        break;
+                        return true;
                     }
                 }
             }
         }
 
-        made_changes
+        false
     }
 
     /// For each square, for each possible value of each empty cell in the square, it sets the value to the cell if
     /// the value is only possible in the cell and not in other empty cells in the same square.
     fn in_squares(sudoku: &mut SudokuTemplate) -> bool {
-        let mut made_changes = false;
-
         // For each square
         for (sx, sy) in iproduct!([0, 3, 6], [0, 3, 6]) {
             // For each cell in the square
@@ -114,15 +109,14 @@ impl SetHiddenSingles {
                         if set_value {
                             // Set it
                             sudoku.cells[sx + x][sy + y].set_value(value);
-                            made_changes = true;
-                            break;
+                            return true;
                         }
                     }
                 }
             }
         }
 
-        made_changes
+        false
     }
 }
 
@@ -138,9 +132,10 @@ impl SudokuSolvingStrategy for SetHiddenSingles {
 
 #[cfg(test)]
 mod tests {
-    use crate::solving::set_hidden_singles::SetHiddenSingles;
-    use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
+    use crate::solving::strategies::set_hidden_singles::SetHiddenSingles;
+    use crate::solving::traits::SudokuSolvingStrategy;
     use crate::traits::SudokuTemplate;
+    use crate::Difficulty;
     use crate::Sudoku;
     use itertools::iproduct;
 

@@ -9,6 +9,14 @@ pub(crate) struct SudokuTemplate {
 }
 
 impl SudokuTemplate {
+
+    pub(crate) fn empty_cells_mut(&mut self) -> impl Iterator<Item = &mut Cell> {
+        self.cells
+            .iter_mut()
+            .flat_map(|row| row.iter_mut())
+            .filter(|cell| cell.is_empty())
+    }
+
     pub(crate) fn get_values_in_row(&self, row: usize) -> Vec<usize> {
         self.cells[row]
             .iter()

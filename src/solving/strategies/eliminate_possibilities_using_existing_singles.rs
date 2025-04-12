@@ -1,7 +1,7 @@
-use itertools::iproduct;
-
-use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
+use crate::solving::traits::SudokuSolvingStrategy;
+use crate::traits::Difficulty;
 use crate::traits::SudokuTemplate;
+use itertools::iproduct;
 
 /// Sudoku strategy that eliminates possibilities in a sudoku puzzle by analyzing existing single values. It uses cells
 /// that already have a value to remove that value as a possibility from other cells in the same row, column, or block.
@@ -98,8 +98,9 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingExistingSingles {
 
 #[cfg(test)]
 mod tests {
-    use crate::solving::eliminate_possibilities_using_existing_singles::EliminatePossibilitiesUsingExistingSingles;
-    use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
+    use crate::solving::strategies::eliminate_possibilities_using_existing_singles::EliminatePossibilitiesUsingExistingSingles;
+    use crate::solving::traits::SudokuSolvingStrategy;
+    use crate::traits::Difficulty;
     use crate::traits::SudokuTemplate;
     use crate::Sudoku;
     use itertools::iproduct;

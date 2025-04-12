@@ -1,4 +1,5 @@
-use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
+use crate::solving::traits::SudokuSolvingStrategy;
+use crate::traits::Difficulty;
 use crate::traits::SudokuTemplate;
 use itertools::{iproduct, Itertools};
 use std::cmp::min;
@@ -181,10 +182,11 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingHiddenGroups {
 
 #[cfg(test)]
 mod tests {
-    use crate::solving::eliminate_possibilities_using_existing_singles::EliminatePossibilitiesUsingExistingSingles;
-    use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
-    use crate::solving::traits::{Difficulty, SudokuSolvingStrategy};
+    use crate::solving::strategies::eliminate_possibilities_using_existing_singles::EliminatePossibilitiesUsingExistingSingles;
+    use crate::solving::strategies::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
+    use crate::solving::traits::SudokuSolvingStrategy;
     use crate::traits::SudokuTemplate;
+    use crate::Difficulty;
     use crate::Sudoku;
 
     const SUDOKU_WITHOUT_HIDDEN_GROUP: &str = "\
@@ -212,8 +214,8 @@ mod tests {
     }
 
     mod in_rows {
-        use crate::solving::eliminate_possibilities_using_hidden_groups::tests::{as_template, SUDOKU_WITHOUT_HIDDEN_GROUP};
-        use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
+        use crate::solving::strategies::eliminate_possibilities_using_hidden_groups::tests::{as_template, SUDOKU_WITHOUT_HIDDEN_GROUP};
+        use crate::solving::strategies::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
         use itertools::iproduct;
 
         const SUDOKU_WITH_HIDDEN_PAIR_IN_ROW: &str = "\
@@ -355,8 +357,8 @@ mod tests {
     }
 
     mod in_columns {
-        use crate::solving::eliminate_possibilities_using_hidden_groups::tests::{as_template, SUDOKU_WITHOUT_HIDDEN_GROUP};
-        use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
+        use crate::solving::strategies::eliminate_possibilities_using_hidden_groups::tests::{as_template, SUDOKU_WITHOUT_HIDDEN_GROUP};
+        use crate::solving::strategies::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
         use itertools::iproduct;
 
         const SUDOKU_WITH_HIDDEN_PAIR_IN_COLUMN: &str = "\
@@ -498,8 +500,8 @@ mod tests {
     }
 
     mod in_squares {
-        use crate::solving::eliminate_possibilities_using_hidden_groups::tests::{as_template, SUDOKU_WITHOUT_HIDDEN_GROUP};
-        use crate::solving::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
+        use crate::solving::strategies::eliminate_possibilities_using_hidden_groups::tests::{as_template, SUDOKU_WITHOUT_HIDDEN_GROUP};
+        use crate::solving::strategies::eliminate_possibilities_using_hidden_groups::EliminatePossibilitiesUsingHiddenGroups;
         use itertools::iproduct;
 
         const SUDOKU_WITH_HIDDEN_PAIR_IN_SQUARE: &str = "\

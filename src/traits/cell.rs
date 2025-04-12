@@ -60,9 +60,8 @@ impl Cell {
             .any_true()
     }
 
-    /// Removes a specified value from the cell's possibilities. If as a result only one possible value is left, it will
-    /// be set as the cell's value. Returns `true` if the cell state changed as a result of this operation, or `false`
-    /// otherwise.
+    /// Removes a specified value from the cell's possibilities. Returns `true` if the cell state changed as a result
+    /// of this operation, or `false` otherwise.
     pub(crate) fn remove_possibility(&mut self, value: usize) -> bool {
         // Check if the value is valid and still possible.
         if value < 1 || value > 9 || !self.possibilities[value - 1] {
@@ -71,12 +70,6 @@ impl Cell {
 
         // Remove value from the possibilities.
         self.possibilities[value - 1] = false;
-
-        // Check if only one possible value remains.
-        let remaining_possibilities = self.possible_values();
-        if remaining_possibilities.len() == 1 {
-            self.value = remaining_possibilities[0];
-        }
         true
     }
 
