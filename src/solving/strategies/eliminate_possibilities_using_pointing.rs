@@ -137,4 +137,8 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingPointing {
     fn difficulty(&self) -> Difficulty {
         Difficulty::Medium
     }
+
+    fn name(&self) -> &'static str {
+        "EliminatePossibilitiesByDetectingPointingGroups"
+    }
 }

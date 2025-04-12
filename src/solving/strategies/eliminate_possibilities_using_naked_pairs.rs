@@ -76,4 +76,8 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingNakedPairs {
     fn difficulty(&self) -> Difficulty {
         Difficulty::Easy
     }
+
+    fn name(&self) -> &'static str {
+        "EliminatePossibilitiesByDetectingNakedPairs"
+    }
 }

@@ -178,6 +178,10 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingHiddenGroups {
     fn difficulty(&self) -> Difficulty {
         Difficulty::Medium
     }
+
+    fn name(&self) -> &'static str {
+        "EliminatePossibilitiesByDetectingHiddenGroups"
+    }
 }
 
 #[cfg(test)]

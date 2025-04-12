@@ -35,4 +35,8 @@ impl SudokuSolvingStrategy for SetSingleRandomly {
     fn difficulty(&self) -> Difficulty {
         Difficulty::Easy
     }
+
+    fn name(&self) -> &'static str {
+        "SetRandomPossibilityAsValue"
+    }
 }

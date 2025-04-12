@@ -128,6 +128,10 @@ impl SudokuSolvingStrategy for SetHiddenSingles {
     fn difficulty(&self) -> Difficulty {
         Difficulty::Easy
     }
+
+    fn name(&self) -> &'static str {
+        "SetHiddenSingles"
+    }
 }
 
 #[cfg(test)]

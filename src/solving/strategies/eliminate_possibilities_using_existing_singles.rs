@@ -94,6 +94,10 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingExistingSingles {
     fn difficulty(&self) -> Difficulty {
         Difficulty::Easy
     }
+
+    fn name(&self) -> &'static str {
+        "EliminatePossibilitiesUsingExistingValues"
+    }
 }
 
 #[cfg(test)]

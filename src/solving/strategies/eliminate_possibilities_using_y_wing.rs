@@ -103,4 +103,8 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingYWing {
     fn difficulty(&self) -> Difficulty {
         Difficulty::Hard
     }
+
+    fn name(&self) -> &'static str {
+        "EliminatePossibilitiesByDetectingYWingPatterns"
+    }
 }

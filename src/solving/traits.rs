@@ -22,4 +22,7 @@ pub(crate) trait SudokuSolvingStrategy {
     ///
     /// `Difficulty` - the difficulty level of the strategy.
     fn difficulty(&self) -> Difficulty;
+
+    /// Provides the name of the strategy.
+    fn name(&self) -> &'static str;
 }

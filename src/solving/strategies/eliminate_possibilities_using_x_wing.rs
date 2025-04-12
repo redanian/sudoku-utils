@@ -65,4 +65,8 @@ impl SudokuSolvingStrategy for EliminatePossibilitiesUsingXWing {
     fn difficulty(&self) -> Difficulty {
         Difficulty::Hard
     }
+
+    fn name(&self) -> &'static str {
+        "EliminatePossibilitiesByDetectingXWingPatterns"
+    }
 }
