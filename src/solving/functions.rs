@@ -11,14 +11,10 @@ use crate::traits::Difficulty;
 use crate::traits::Sudoku;
 use crate::traits::SudokuTemplate;
 use itertools::Itertools;
+use std::collections::HashMap;
 
 pub fn solve(sudoku: &Sudoku) -> Sudoku {
-    let strategies = implemented_strategies();
-
-    let mut template = SudokuTemplate::from(sudoku.clone());
-    while strategies.iter().any(|s| s.solve(&mut template)) {}
-
-    Sudoku::from(template)
+    solve_with_difficulty(sudoku, Difficulty::Hard)
 }
 
 pub fn solve_with_difficulty(sudoku: &Sudoku, difficulty: Difficulty) -> Sudoku {
@@ -41,6 +37,36 @@ pub fn solve_with_guessing(sudoku: &Sudoku) -> Sudoku {
     while strategies.iter().any(|s| s.solve(&mut template)) {}
 
     Sudoku::from(template)
+}
+
+pub(crate) fn solve_with_statistics(sudoku: &Sudoku) -> (Sudoku, HashMap<&'static str, (Difficulty, u64)>) {
+    // Get all implemented strategies.
+    let strategies = implemented_strategies();
+
+    // Initialize statistics map.
+    let mut statistics = HashMap::new();
+    strategies.iter().for_each(|strategy| {
+        statistics.insert(strategy.name(), (strategy.difficulty(), 0));
+    });
+
+    // Define solving template.
+    let mut template = SudokuTemplate::from(sudoku.clone());
+
+    // Solve puzzle using strategies while also maintaining statistics.
+    while strategies.iter().any(|strategy| {
+        let applied = strategy.solve(&mut template);
+
+        if applied {
+            statistics
+                .entry(strategy.name())
+                .and_modify(|(_, count)| *count += 1);
+        }
+
+        applied
+    }) {}
+
+    // Return result.
+    (Sudoku::from(template), statistics)
 }
 
 fn implemented_strategies() -> Vec<Box<dyn SudokuSolvingStrategy>> {

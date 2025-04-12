@@ -1,5 +1,5 @@
 use crate::evaluating::functions::evaluate_difficulty;
-use crate::solving::functions::{solve, solve_with_guessing};
+use crate::solving::functions::{solve, solve_with_guessing, solve_with_statistics};
 use crate::traits::Difficulty;
 use crate::traits::Sudoku;
 use itertools::{iproduct, Itertools};
@@ -12,11 +12,29 @@ pub fn generate_sudoku() -> Sudoku {
 
 pub fn generate_sudoku_with_difficulty(difficulty: Difficulty) -> Sudoku {
     loop {
+        // Generate unsolved sudoku.
         let sudoku = generate();
+
+        // Determine sudoku difficulty.
         let difficulty_opt = evaluate_difficulty(&sudoku);
 
+        // If the puzzle difficulty matches the requested difficulty.
         if difficulty_opt == Some(difficulty) {
-            return sudoku;
+            // Get puzzle solving statistics by solving it.
+            let (_, statistics) = solve_with_statistics(&sudoku);
+
+            // Check if all implemented strategies that are associated with the requested difficulty were used at least
+            // once during solving so that the puzzle is more interesting.
+            let all_difficulty_level_strategies_used = statistics
+                .iter()
+                .filter(|(_, (strategy_difficulty, count))| *strategy_difficulty == difficulty)
+                .map(|(_, (_, count))| *count)
+                .all(|count| count > 0);
+
+            // Return only if all implemented strategies with the requested difficulty were used at least once.
+            if all_difficulty_level_strategies_used {
+                return sudoku;
+            }
         }
     }
 }
