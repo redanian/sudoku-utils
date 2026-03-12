@@ -3,6 +3,7 @@ use std::process::exit;
 use clap::{Arg, Command};
 
 use sudoku_utils::{solve, Sudoku};
+use sudoku_utils_cli::printing::print_as_grid;
 
 fn main() {
     let matches = Command::new("Sudoku solver")
@@ -24,11 +25,11 @@ fn main() {
         });
 
     println!("Input: ");
-    print_sudoku(&unsolved_sudoku);
+    print_as_grid(&unsolved_sudoku);
 
     let solved_sudoku = solve(&unsolved_sudoku);
     println!("Output: ");
-    print_sudoku(&solved_sudoku);
+    print_as_grid(&solved_sudoku);
 }
 
 fn test() -> [[usize; 9]; 9] {
@@ -43,30 +44,4 @@ fn test() -> [[usize; 9]; 9] {
         [0, 0, 0, 0, 0, 0, 0, 0, 3],
         [0, 0, 0, 8, 4, 2, 6, 0, 0],
     ]
-}
-
-fn print_sudoku(sudoku: &Sudoku) {
-    println!(" {}", "-".repeat(29));
-    for (index, row) in sudoku.get_cells().iter().enumerate() {
-        println!(
-            "| {}  {}  {} | {}  {}  {} | {}  {}  {} |",
-            non_zero_or_space(row[0]),
-            non_zero_or_space(row[1]),
-            non_zero_or_space(row[2]),
-            non_zero_or_space(row[3]),
-            non_zero_or_space(row[4]),
-            non_zero_or_space(row[5]),
-            non_zero_or_space(row[6]),
-            non_zero_or_space(row[7]),
-            non_zero_or_space(row[8])
-        );
-        if (index + 1) % 3 == 0 && index < 8 {
-            println!("|{}|", "-".repeat(29));
-        }
-    }
-    println!(" {}", "-".repeat(29));
-}
-
-fn non_zero_or_space(x: usize) -> String {
-    if x != 0 { x.to_string() } else { String::from(" ") }
 }
