@@ -11,4 +11,3 @@ mod printer;
 mod solving;
 mod traits;
 mod utils;
-mod validator;

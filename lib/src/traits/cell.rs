@@ -73,13 +73,6 @@ impl Cell {
         true
     }
 
-    pub(crate) fn remove_possibilities(&mut self, possibilities: &[usize]) -> bool {
-        possibilities
-            .iter()
-            .map(|&possibility| self.remove_possibility(possibility))
-            .any_true_exhaustive()
-    }
-
     pub(crate) fn remove_possibilities_outside_of(&mut self, possibilities: &[usize]) -> bool {
         (1..=9)
             .filter(|n| !possibilities.contains(n))

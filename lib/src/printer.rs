@@ -1,5 +1,6 @@
 use crate::traits::SudokuTemplate;
 
+#[allow(unused)]    // Method is used for debugging while developing
 pub(crate) fn print(sudoku: &SudokuTemplate) {
     println!("[DEBUG] current template state: ");
     println!(" {} ", "-".repeat(111));

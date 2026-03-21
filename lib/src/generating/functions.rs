@@ -27,7 +27,7 @@ pub fn generate_sudoku_with_difficulty(difficulty: Difficulty) -> Sudoku {
             // once during solving so that the puzzle is more interesting.
             let all_difficulty_level_strategies_used = statistics
                 .iter()
-                .filter(|(_, (strategy_difficulty, count))| *strategy_difficulty == difficulty)
+                .filter(|(_, (strategy_difficulty, _))| *strategy_difficulty == difficulty)
                 .map(|(_, (_, count))| *count)
                 .all(|count| count > 0);
 
