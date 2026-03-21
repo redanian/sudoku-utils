@@ -1,4 +1,5 @@
 use clap::{Arg, ArgAction, Command};
+use std::process::exit;
 use sudoku_utils::{generate_sudoku_with_difficulty, Difficulty};
 use sudoku_utils_cli::printing::print_as_grid;
 
@@ -43,8 +44,8 @@ fn parse_optional_difficulty(difficulty_opt: Option<&String>) -> Difficulty {
                 "medium" => Difficulty::Medium,
                 "hard" => Difficulty::Hard,
                 _ => {
-                    eprintln!("Invalid difficulty: {difficulty_string}");
-                    std::process::exit(1);
+                    eprintln!("[Error] Invalid difficulty: {difficulty_string}");
+                    exit(1);
                 }
             },
         )
