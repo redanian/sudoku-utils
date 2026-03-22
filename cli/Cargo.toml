@@ -1,8 +1,8 @@
 [package]
 name = "sudoku-utils-cli"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 sudoku-utils = { path = "../lib" }
-clap = "4.5.36"
+clap = "4.6.0"
